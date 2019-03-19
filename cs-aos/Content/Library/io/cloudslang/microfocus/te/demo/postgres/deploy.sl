@@ -1,4 +1,4 @@
-namespace: microfocus.te.demo.postgres
+namespace: io.cloudslang.microfocus.te.demo.postgres
 flow:
   name: deploy
   inputs:

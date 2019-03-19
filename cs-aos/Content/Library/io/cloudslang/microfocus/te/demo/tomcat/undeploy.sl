@@ -1,4 +1,4 @@
-namespace: microfocus.te.demo.postgres
+namespace: io.cloudslang.microfocus.te.demo.tomcat
 flow:
   name: undeploy
   inputs:
@@ -7,11 +7,11 @@ flow:
   - password:
       sensitive: true
   workflow:
-  - install_pkgs:
+  - remove_tomcat:
       do:
         io.cloudslang.base.ssh.ssh_command:
         - host: '${hostname}'
-        - command: yum remove -y postgresql-server postgresql-contrib
+        - command: yum remove -y tomcat tomcat-webapps tomcat-admin-webapps
         - username: '${username}'
         - password:
             value: '${password}'
@@ -25,15 +25,15 @@ flow:
 extensions:
   graph:
     steps:
-      install_pkgs:
-        x: 232
-        y: 132
+      remove_tomcat:
+        x: 202
+        y: 187
         navigate:
-          8998de1f-c4c9-69b5-887b-cf63fda6a9f5:
-            targetId: d0b408af-52a5-8f5b-6074-3df759e2732d
+          7f8258e7-b2d6-aa03-1d56-02544b82d2b9:
+            targetId: 83604d53-16a8-c30c-2904-2463222e9b3c
             port: SUCCESS
     results:
       SUCCESS:
-        d0b408af-52a5-8f5b-6074-3df759e2732d:
-          x: 493
-          y: 136
+        83604d53-16a8-c30c-2904-2463222e9b3c:
+          x: 584
+          y: 174
