@@ -1,4 +1,4 @@
-namespace: microfocus.te.demo.tomcat
+namespace: io.cloudslang.microfocus.te.demo.tomcat
 flow:
   name: deploy
   inputs:
