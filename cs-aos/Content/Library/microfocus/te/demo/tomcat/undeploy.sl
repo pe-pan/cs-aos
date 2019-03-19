@@ -1,4 +1,4 @@
-namespace: te.demo.tomcat
+namespace: microfocus.te.demo.tomcat
 flow:
   name: undeploy
   inputs:
