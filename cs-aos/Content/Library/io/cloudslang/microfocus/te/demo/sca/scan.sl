@@ -26,7 +26,7 @@ flow:
         do:
           io.cloudslang.base.ssh.ssh_command:
             - host: "${get('hostname', get_sp('te.demo.fortify.hostname'))}"
-            - command: "${get('sourceanalyzer', get_sp('te.demo.fortify.sourceanalyzer'))+' '+get('url', get_sp('te.demo.aos.url'))+' '}"
+            - command: "${get('sourceanalyzer', get_sp('te.demo.fortify.sourceanalyzer'))+' '+get('url', get_sp('te.demo.aos.url'))+' '+get('folder', get_sp('te.demo.fortify.folder'))+' '+get('level', get_sp('te.demo.fortify.level'))}"
             - username: "${get('username', get_sp('te.demo.fortify.username'))}"
             - password:
                 value: "${get('password', get_sp('te.demo.fortify.password'))}"
