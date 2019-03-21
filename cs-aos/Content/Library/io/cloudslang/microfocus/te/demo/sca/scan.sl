@@ -1,3 +1,12 @@
+########################################################################################################################
+#!!
+#! @input hostname: VM where Fortify SCA is installed
+#! @input sourceanalyzer: Full fie path where is the scan.sh script placed
+#! @input url: Git repository URL
+#! @input folder: Sub-folder of the repo to be scanned
+#! @input level: Which level of security issues to scan the code for
+#!!#
+########################################################################################################################
 namespace: io.cloudslang.microfocus.te.demo.sca
 flow:
   name: scan
@@ -25,7 +34,7 @@ flow:
         default: "${get_sp('te.demo.fortify.level')}"
         required: false
   workflow:
-    - checkout_source_code:
+    - calculate_score:
         do:
           io.cloudslang.base.ssh.ssh_command:
             - host: "${get('hostname', get_sp('te.demo.fortify.hostname'))}"
@@ -34,16 +43,21 @@ flow:
             - password:
                 value: "${get('password', get_sp('te.demo.fortify.password'))}"
                 sensitive: true
+        publish:
+          - score: '${standard_out}'
+          - command_return_code
         navigate:
           - SUCCESS: SUCCESS
           - FAILURE: on_failure
+  outputs:
+    - score: '${score}'
   results:
     - FAILURE
     - SUCCESS
 extensions:
   graph:
     steps:
-      checkout_source_code:
+      calculate_score:
         x: 308
         y: 112
         navigate:
