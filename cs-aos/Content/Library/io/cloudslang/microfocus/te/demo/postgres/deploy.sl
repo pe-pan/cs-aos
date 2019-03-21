@@ -2,110 +2,114 @@ namespace: io.cloudslang.microfocus.te.demo.postgres
 flow:
   name: deploy
   inputs:
-  - hostname
-  - username
-  - password:
-      sensitive: true
+    - hostname
+    - username:
+        default: "${get_sp('te.demo.vcenter.username')}"
+        required: false
+    - password:
+        default: "${get_sp('te.demo.vcenter.password')}"
+        required: false
+        sensitive: true
   workflow:
-  - install_pkgs:
-      do:
-        io.cloudslang.base.ssh.ssh_command:
-        - host: '${hostname}'
-        - command: yum install -y postgresql-server postgresql-contrib
-        - username: '${username}'
-        - password:
-            value: '${password}'
-            sensitive: true
-      navigate:
-      - SUCCESS: create_db_cluster
-      - FAILURE: on_failure
-  - create_db_cluster:
-      do:
-        io.cloudslang.base.ssh.ssh_command:
-        - host: '${hostname}'
-        - command: postgresql-setup initdb
-        - username: '${username}'
-        - password:
-            value: '${password}'
-            sensitive: true
-      navigate:
-      - SUCCESS: enable_md5
-      - FAILURE: on_failure
-  - enable_md5:
-      do:
-        io.cloudslang.base.ssh.ssh_command:
-        - host: '${hostname}'
-        - command: sed -i s/ident/md5/g /var/lib/pgsql/data/pg_hba.conf
-        - username: '${username}'
-        - password:
-            value: '${password}'
-            sensitive: true
-      navigate:
-      - SUCCESS: listen_address
-      - FAILURE: on_failure
-  - enable_autostart:
-      do:
-        io.cloudslang.base.ssh.ssh_command:
-        - host: '${hostname}'
-        - command: systemctl enable postgresql
-        - username: '${username}'
-        - password:
-            value: '${password}'
-            sensitive: true
-      navigate:
-      - SUCCESS: start
-      - FAILURE: on_failure
-  - start:
-      do:
-        io.cloudslang.base.ssh.ssh_command:
-        - host: '${hostname}'
-        - command: systemctl restart postgresql
-        - username: '${username}'
-        - password:
-            value: '${password}'
-            sensitive: true
-      navigate:
-      - SUCCESS: firewall_cfg
-      - FAILURE: on_failure
-  - firewall_cfg:
-      do:
-        io.cloudslang.base.ssh.ssh_command:
-        - host: '${hostname}'
-        - command: 'firewall-cmd --get-active-zones && firewall-cmd --zone=public --add-port=5432/tcp --permanent && firewall-cmd --reload'
-        - username: '${username}'
-        - password:
-            value: '${password}'
-            sensitive: true
-      navigate:
-      - SUCCESS: SUCCESS
-      - FAILURE: on_failure
-  - listen_address:
-      do:
-        io.cloudslang.base.ssh.ssh_command:
-        - host: '${hostname}'
-        - command: 'sed -i s/localhost/*/g /var/lib/pgsql/data/postgresql.conf'
-        - username: '${username}'
-        - password:
-            value: '${password}'
-            sensitive: true
-      navigate:
-      - SUCCESS: activate_lister
-      - FAILURE: on_failure
-  - activate_lister:
-      do:
-        io.cloudslang.base.ssh.ssh_command:
-        - host: '${hostname}'
-        - command: 'sed -i s/#listen_addresses/listen_addresses/g /var/lib/pgsql/data/postgresql.conf'
-        - username: '${username}'
-        - password:
-            value: '${password}'
-            sensitive: true
-      navigate:
-      - SUCCESS: enable_autostart
-      - FAILURE: on_failure
+    - install_pkgs:
+        do:
+          io.cloudslang.base.ssh.ssh_command:
+            - host: '${hostname}'
+            - command: yum install -y postgresql-server postgresql-contrib
+            - username: '${username}'
+            - password:
+                value: '${password}'
+                sensitive: true
+        navigate:
+          - SUCCESS: create_db_cluster
+          - FAILURE: on_failure
+    - create_db_cluster:
+        do:
+          io.cloudslang.base.ssh.ssh_command:
+            - host: '${hostname}'
+            - command: postgresql-setup initdb
+            - username: '${username}'
+            - password:
+                value: '${password}'
+                sensitive: true
+        navigate:
+          - SUCCESS: enable_md5
+          - FAILURE: on_failure
+    - enable_md5:
+        do:
+          io.cloudslang.base.ssh.ssh_command:
+            - host: '${hostname}'
+            - command: sed -i s/ident/md5/g /var/lib/pgsql/data/pg_hba.conf
+            - username: '${username}'
+            - password:
+                value: '${password}'
+                sensitive: true
+        navigate:
+          - SUCCESS: listen_address
+          - FAILURE: on_failure
+    - enable_autostart:
+        do:
+          io.cloudslang.base.ssh.ssh_command:
+            - host: '${hostname}'
+            - command: systemctl enable postgresql
+            - username: '${username}'
+            - password:
+                value: '${password}'
+                sensitive: true
+        navigate:
+          - SUCCESS: start
+          - FAILURE: on_failure
+    - start:
+        do:
+          io.cloudslang.base.ssh.ssh_command:
+            - host: '${hostname}'
+            - command: systemctl restart postgresql
+            - username: '${username}'
+            - password:
+                value: '${password}'
+                sensitive: true
+        navigate:
+          - SUCCESS: firewall_cfg
+          - FAILURE: on_failure
+    - firewall_cfg:
+        do:
+          io.cloudslang.base.ssh.ssh_command:
+            - host: '${hostname}'
+            - command: 'firewall-cmd --get-active-zones && firewall-cmd --zone=public --add-port=5432/tcp --permanent && firewall-cmd --reload'
+            - username: '${username}'
+            - password:
+                value: '${password}'
+                sensitive: true
+        navigate:
+          - SUCCESS: SUCCESS
+          - FAILURE: on_failure
+    - listen_address:
+        do:
+          io.cloudslang.base.ssh.ssh_command:
+            - host: '${hostname}'
+            - command: 'sed -i s/localhost/*/g /var/lib/pgsql/data/postgresql.conf'
+            - username: '${username}'
+            - password:
+                value: '${password}'
+                sensitive: true
+        navigate:
+          - SUCCESS: activate_lister
+          - FAILURE: on_failure
+    - activate_lister:
+        do:
+          io.cloudslang.base.ssh.ssh_command:
+            - host: '${hostname}'
+            - command: 'sed -i s/#listen_addresses/listen_addresses/g /var/lib/pgsql/data/postgresql.conf'
+            - username: '${username}'
+            - password:
+                value: '${password}'
+                sensitive: true
+        navigate:
+          - SUCCESS: enable_autostart
+          - FAILURE: on_failure
   results:
-  - FAILURE
-  - SUCCESS
+    - FAILURE
+    - SUCCESS
 extensions:
   graph:
     steps:

@@ -2,87 +2,99 @@ namespace: io.cloudslang.microfocus.te.demo.tomcat
 flow:
   name: deploy
   inputs:
-  - hostname
-  - username
-  - password:
-      sensitive: true
+    - hostname: 10.3.62.137
+    - username:
+        default: "${get_sp('te.demo.vcenter.username')}"
+        required: false
+    - password:
+        default: "${get_sp('te.demo.vcenter.password')}"
+        required: false
+        sensitive: true
   workflow:
-  - deploy_packages:
-      do:
-        io.cloudslang.base.ssh.ssh_command:
-        - host: '${hostname}'
-        - command: yum install -y tomcat tomcat-webapps tomcat-admin-webapps
-        - username: '${username}'
-        - password:
-            value: '${password}'
-            sensitive: true
-        - timeout: '900000'
-      navigate:
-      - SUCCESS: config_engine
-      - FAILURE: on_failure
-  - config_engine:
-      do:
-        io.cloudslang.base.ssh.ssh_command:
-        - host: '${hostname}'
-        - command: "echo -e \\\"JAVA_OPTS\\\"=\\\"-Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true -Xmx512m -XX:MaxPermSize=256m -XX:+UseConcMarkSweepGC\\\" >> /usr/share/tomcat/conf/tomcat.conf"
-        - username: '${username}'
-        - password:
-            value: '${password}'
-            sensitive: true
-      navigate:
-      - SUCCESS: admin_user
-      - FAILURE: on_failure
-  - enable_autostart:
-      do:
-        io.cloudslang.base.ssh.ssh_command:
-        - host: '${hostname}'
-        - command: systemctl enable tomcat
-        - username: '${username}'
-        - password:
-            value: '${password}'
-            sensitive: true
-      navigate:
-      - SUCCESS: start
-      - FAILURE: on_failure
-  - start:
-      do:
-        io.cloudslang.base.ssh.ssh_command:
-        - host: '${hostname}'
-        - command: systemctl start tomcat
-        - username: '${username}'
-        - password:
-            value: '${password}'
-            sensitive: true
-      navigate:
-      - SUCCESS: firewall_cfg
-      - FAILURE: on_failure
-  - admin_user:
-      do:
-        io.cloudslang.base.ssh.ssh_command:
-        - host: '${hostname}'
-        - command: "echo -e \"<tomcat-users>\n<user username=\\\"\"admin\\\"\" password=\\\"\"password\\\" roles=\\\"\"manager-gui,admin-gui\\\"/>\n</tomcat-users>\n\" > /usr/share/tomcat/conf/tomcat-users.xml"
-        - username: '${username}'
-        - password:
-            value: '${password}'
-            sensitive: true
-      navigate:
-      - SUCCESS: enable_autostart
-      - FAILURE: on_failure
-  - firewall_cfg:
-      do:
-        io.cloudslang.base.ssh.ssh_command:
-        - host: '${hostname}'
-        - command: 'firewall-cmd --get-active-zones && firewall-cmd --zone=public --add-port=8080/tcp --permanent && firewall-cmd --reload'
-        - username: '${username}'
-        - password:
-            value: '${password}'
-            sensitive: true
-      navigate:
-      - SUCCESS: SUCCESS
-      - FAILURE: on_failure
+    - deploy_packages:
+        do:
+          io.cloudslang.base.ssh.ssh_command:
+            - host: '${hostname}'
+            - command: yum install -y tomcat tomcat-webapps tomcat-admin-webapps
+            - username: '${username}'
+            - password:
+                value: '${password}'
+                sensitive: true
+            - timeout: '900000'
+        publish:
+          - standard_out
+          - standard_err
+          - command_return_code
+        navigate:
+          - SUCCESS: config_engine
+          - FAILURE: on_failure
+    - config_engine:
+        do:
+          io.cloudslang.base.ssh.ssh_command:
+            - host: '${hostname}'
+            - command: "echo -e \\\"JAVA_OPTS\\\"=\\\"-Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true -Xmx512m -XX:MaxPermSize=256m -XX:+UseConcMarkSweepGC\\\" >> /usr/share/tomcat/conf/tomcat.conf"
+            - username: '${username}'
+            - password:
+                value: '${password}'
+                sensitive: true
+        publish:
+          - standard_out
+          - standard_err
+          - command_return_code
+        navigate:
+          - SUCCESS: admin_user
+          - FAILURE: on_failure
+    - enable_autostart:
+        do:
+          io.cloudslang.base.ssh.ssh_command:
+            - host: '${hostname}'
+            - command: systemctl enable tomcat
+            - username: '${username}'
+            - password:
+                value: '${password}'
+                sensitive: true
+        navigate:
+          - SUCCESS: start
+          - FAILURE: on_failure
+    - start:
+        do:
+          io.cloudslang.base.ssh.ssh_command:
+            - host: '${hostname}'
+            - command: systemctl start tomcat
+            - username: '${username}'
+            - password:
+                value: '${password}'
+                sensitive: true
+        navigate:
+          - SUCCESS: firewall_cfg
+          - FAILURE: on_failure
+    - admin_user:
+        do:
+          io.cloudslang.base.ssh.ssh_command:
+            - host: '${hostname}'
+            - command: "echo -e \"<tomcat-users>\n<user username=\\\"\"admin\\\"\" password=\\\"\"password\\\" roles=\\\"\"manager-gui,admin-gui\\\"/>\n</tomcat-users>\n\" > /usr/share/tomcat/conf/tomcat-users.xml"
+            - username: '${username}'
+            - password:
+                value: '${password}'
+                sensitive: true
+        navigate:
+          - SUCCESS: enable_autostart
+          - FAILURE: on_failure
+    - firewall_cfg:
+        do:
+          io.cloudslang.base.ssh.ssh_command:
+            - host: '${hostname}'
+            - command: 'firewall-cmd --get-active-zones && firewall-cmd --zone=public --add-port=8080/tcp --permanent && firewall-cmd --reload'
+            - username: '${username}'
+            - password:
+                value: '${password}'
+                sensitive: true
+        navigate:
+          - SUCCESS: SUCCESS
+          - FAILURE: on_failure
   results:
-  - FAILURE
-  - SUCCESS
+    - FAILURE
+    - SUCCESS
 extensions:
   graph:
     steps:

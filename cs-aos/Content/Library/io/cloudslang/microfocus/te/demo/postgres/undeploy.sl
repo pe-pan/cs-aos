@@ -2,26 +2,30 @@ namespace: io.cloudslang.microfocus.te.demo.postgres
 flow:
   name: undeploy
   inputs:
-  - hostname
-  - username
-  - password:
-      sensitive: true
+    - hostname
+    - username:
+        default: "${get_sp('te.demo.vcenter.username')}"
+        required: false
+    - password:
+        default: "${get_sp('te.demo.vcenter.password')}"
+        required: false
+        sensitive: true
   workflow:
-  - install_pkgs:
-      do:
-        io.cloudslang.base.ssh.ssh_command:
-        - host: '${hostname}'
-        - command: yum remove -y postgresql-server postgresql-contrib
-        - username: '${username}'
-        - password:
-            value: '${password}'
-            sensitive: true
-      navigate:
-      - SUCCESS: SUCCESS
-      - FAILURE: on_failure
+    - install_pkgs:
+        do:
+          io.cloudslang.base.ssh.ssh_command:
+            - host: '${hostname}'
+            - command: yum remove -y postgresql-server postgresql-contrib
+            - username: '${username}'
+            - password:
+                value: '${password}'
+                sensitive: true
+        navigate:
+          - SUCCESS: SUCCESS
+          - FAILURE: on_failure
   results:
-  - FAILURE
-  - SUCCESS
+    - FAILURE
+    - SUCCESS
 extensions:
   graph:
     steps:
