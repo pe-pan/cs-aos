@@ -1,4 +1,4 @@
-namespace: ''
+namespace: 'io.cloudslang.microfocus.aos'
 properties:
   - script_location: /tmp
   - script_retries: '5'
