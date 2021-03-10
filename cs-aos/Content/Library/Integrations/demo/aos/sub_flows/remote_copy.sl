@@ -1,3 +1,13 @@
+########################################################################################################################
+#!!
+#! @description: Downloads the file from the given URL and copies it to the remote VM. If no password is given, it uses the private key file to connect to the remote VM.
+#!
+#! @input host: VM where to copy the file
+#! @input username: VM username
+#! @input password: VM password; if not given, private key file is used instead
+#! @input url: Where to download the file from
+#!!#
+########################################################################################################################
 namespace: io.cloudslang.demo.aos.sub_flows
 flow:
   name: remote_copy
@@ -6,24 +16,18 @@ flow:
     - username
     - password:
         required: false
+        sensitive: true
     - url
   workflow:
-    - extract_filename:
-        do:
-          io.cloudslang.demo.aos.tools.extract_filename:
-            - url: '${url}'
-        publish:
-          - filename
-        navigate:
-          - SUCCESS: get_file
     - get_file:
         do:
           io.cloudslang.base.http.http_client_action:
             - url: '${url}'
             - auth_type: anonymous
-            - destination_file: '${filename}'
+            - destination_file: '${url[url.rfind("/")+1:]}'
             - method: GET
-        publish: []
+        publish:
+          - filename: '${destination_file}'
         navigate:
           - SUCCESS: remote_secure_copy
           - FAILURE: on_failure
@@ -50,9 +54,6 @@ flow:
 extensions:
   graph:
     steps:
-      extract_filename:
-        x: 106
-        'y': 88
       get_file:
         x: 100
         'y': 249
