@@ -1,4 +1,4 @@
-namespace: io.cloudslang.demo.aos
+namespace: Integrations.demo.aos
 flow:
   name: install_aos
   inputs:
@@ -13,7 +13,7 @@ flow:
   workflow:
     - install_postgres:
         do:
-          io.cloudslang.demo.aos.sub_flows.initialize_artifact:
+          Integrations.demo.aos.sub_flows.initialize_artifact:
             - host: "${get('db_host', tomcat_host)}"
             - username: '${username}'
             - password: '${password}'
@@ -23,7 +23,7 @@ flow:
           - SUCCESS: install_java
     - install_java:
         do:
-          io.cloudslang.demo.aos.sub_flows.initialize_artifact:
+          Integrations.demo.aos.sub_flows.initialize_artifact:
             - host: '${tomcat_host}'
             - username: '${username}'
             - password: '${password}'
@@ -33,7 +33,7 @@ flow:
           - SUCCESS: install_tomcat
     - install_tomcat:
         do:
-          io.cloudslang.demo.aos.sub_flows.initialize_artifact:
+          Integrations.demo.aos.sub_flows.initialize_artifact:
             - host: '${tomcat_host}'
             - username: '${username}'
             - password: '${password}'
@@ -50,7 +50,7 @@ flow:
           - 'FALSE': deploy_wars
     - install_java_as:
         do:
-          io.cloudslang.demo.aos.sub_flows.initialize_artifact:
+          Integrations.demo.aos.sub_flows.initialize_artifact:
             - host: '${account_service_host}'
             - username: '${username}'
             - password: '${password}'
@@ -60,7 +60,7 @@ flow:
           - SUCCESS: install_tomcat_as
     - install_tomcat_as:
         do:
-          io.cloudslang.demo.aos.sub_flows.initialize_artifact:
+          Integrations.demo.aos.sub_flows.initialize_artifact:
             - host: '${account_service_host}'
             - username: '${username}'
             - password: '${password}'
@@ -70,7 +70,7 @@ flow:
           - SUCCESS: deploy_wars
     - deploy_wars:
         do:
-          io.cloudslang.demo.aos.sub_flows.deploy_wars:
+          Integrations.demo.aos.sub_flows.deploy_wars:
             - tomcat_host: '${tomcat_host}'
             - account_service_host: "${get('acccount_service_host',tomcat_host)}"
             - db_host: "${get('db_host', tomcat_host)}"

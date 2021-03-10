@@ -1,4 +1,4 @@
-namespace: io.cloudslang.demo.aos.tools
+namespace: Integrations.demo.aos.tools
 flow:
   name: delete_file
   inputs:

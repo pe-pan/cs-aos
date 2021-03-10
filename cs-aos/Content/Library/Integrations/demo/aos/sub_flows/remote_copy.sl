@@ -8,7 +8,7 @@
 #! @input url: Where to download the file from
 #!!#
 ########################################################################################################################
-namespace: io.cloudslang.demo.aos.sub_flows
+namespace: Integrations.demo.aos.sub_flows
 flow:
   name: remote_copy
   inputs:

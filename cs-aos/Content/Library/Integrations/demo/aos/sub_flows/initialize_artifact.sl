@@ -1,4 +1,4 @@
-namespace: io.cloudslang.demo.aos.sub_flows
+namespace: Integrations.demo.aos.sub_flows
 flow:
   name: initialize_artifact
   inputs:

@@ -58,7 +58,7 @@ flow:
           - 'FALSE': is_azure_db_provider
     - downgrade_java:
         do:
-          io.cloudslang.demo.aos.sub_flows.initialize_artifact:
+          Integrations.demo.aos.sub_flows.initialize_artifact:
             - host: '${as_ip}'
             - username: '${as_username}'
             - password: '${as_password}'
@@ -75,7 +75,7 @@ flow:
           - 'FALSE': install_aos_application
     - install_postgres:
         do:
-          io.cloudslang.demo.aos.sub_flows.initialize_artifact:
+          Integrations.demo.aos.sub_flows.initialize_artifact:
             - host: '${as_ip}'
             - username: '${as_username}'
             - password: '${as_password}'
@@ -116,7 +116,7 @@ flow:
           - 'FALSE': is_local_db
     - configure_azure_db:
         do:
-          io.cloudslang.demo.aos.sub_flows.initialize_artifact:
+          Integrations.demo.aos.sub_flows.initialize_artifact:
             - host: '${db_ip}'
             - username: '${db_username}'
             - password: '${db_password}'

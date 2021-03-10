@@ -23,7 +23,7 @@ flow:
           - FAILURE: copy_artifact
     - copy_artifact:
         do:
-          io.cloudslang.demo.aos.sub_flows.remote_copy:
+          Integrations.demo.aos.sub_flows.remote_copy:
             - host: '${host}'
             - username: '${username}'
             - password: '${password}'
@@ -35,7 +35,7 @@ flow:
           - FAILURE: on_failure
     - copy_script:
         do:
-          io.cloudslang.demo.aos.sub_flows.remote_copy:
+          Integrations.demo.aos.sub_flows.remote_copy:
             - host: '${host}'
             - username: '${username}'
             - password: '${password}'
@@ -63,7 +63,7 @@ flow:
           - FAILURE: delete_script
     - delete_script:
         do:
-          io.cloudslang.demo.aos.tools.delete_file:
+          Integrations.demo.aos.tools.delete_file:
             - host: '${host}'
             - username: '${username}'
             - password: '${password}'

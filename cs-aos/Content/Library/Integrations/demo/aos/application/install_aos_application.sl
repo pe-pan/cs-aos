@@ -31,7 +31,7 @@ flow:
           - SUCCESS: deploy_aos_wars
     - deploy_aos_wars:
         do:
-          io.cloudslang.demo.aos.sub_flows.deploy_wars:
+          Integrations.demo.aos.sub_flows.deploy_wars:
             - tomcat_host: '${tomcat_host}'
             - account_service_host: "${get('account_service_host', tomcat_host)}"
             - db_host: "${get('db_host', tomcat_host)}"
