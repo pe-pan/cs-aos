@@ -1,4 +1,4 @@
-namespace: Integrations.demo.aos.tools
+namespace: io.cloudslang.microfocus.aos.sub_flows
 flow:
   name: delete_file
   inputs:

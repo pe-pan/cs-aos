@@ -1,4 +1,4 @@
-namespace: Integrations.demo.aos.sub_flows
+namespace: io.cloudslang.microfocus.aos.sub_flows
 flow:
   name: retry_initialize_artifact
   inputs:
@@ -23,7 +23,7 @@ flow:
           - FAILURE: copy_artifact
     - copy_artifact:
         do:
-          Integrations.demo.aos.sub_flows.remote_copy:
+          io.cloudslang.microfocus.aos.sub_flows.remote_copy:
             - host: '${host}'
             - username: '${username}'
             - password: '${password}'
@@ -35,7 +35,7 @@ flow:
           - FAILURE: on_failure
     - copy_script:
         do:
-          Integrations.demo.aos.sub_flows.remote_copy:
+          io.cloudslang.microfocus.aos.sub_flows.remote_copy:
             - host: '${host}'
             - username: '${username}'
             - password: '${password}'
@@ -63,7 +63,7 @@ flow:
           - FAILURE: delete_script
     - delete_script:
         do:
-          Integrations.demo.aos.tools.delete_file:
+          io.cloudslang.microfocus.aos.sub_flows.delete_file:
             - host: '${host}'
             - username: '${username}'
             - password: '${password}'

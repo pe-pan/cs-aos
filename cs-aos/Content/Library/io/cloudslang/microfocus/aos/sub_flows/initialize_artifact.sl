@@ -1,4 +1,4 @@
-namespace: Integrations.demo.aos.sub_flows
+namespace: io.cloudslang.microfocus.aos.sub_flows
 flow:
   name: initialize_artifact
   inputs:
@@ -16,7 +16,7 @@ flow:
         loop:
           for: "retries in range(0,int(get_sp('script_retries')))"
           do:
-            Integrations.demo.aos.sub_flows.retry_initialize_artifact:
+            io.cloudslang.microfocus.aos.sub_flows.retry_initialize_artifact:
               - host: '${host}'
               - username: '${username}'
               - password: '${password}'

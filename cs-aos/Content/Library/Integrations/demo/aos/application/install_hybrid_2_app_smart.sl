@@ -1,5 +1,7 @@
 ########################################################################################################################
 #!!
+#! @description: Install Hybrid 2 application. It opens the DB ingress (if DB is located in AWS) to be accessible from the Tomcat. It installs Java 8, configures Azure DB and installs local PSQL DB. Finally it creates AOS schema and installs AOS.
+#!
 #! @input instance_id: Service instance ID
 #! @input properties_mapping: Mapping where to take IP addresses from; one of the component will have the IP filled-in
 #!
@@ -58,7 +60,7 @@ flow:
           - 'FALSE': is_azure_db_provider
     - downgrade_java:
         do:
-          Integrations.demo.aos.sub_flows.initialize_artifact:
+          io.cloudslang.microfocus.aos.sub_flows.initialize_artifact:
             - host: '${as_ip}'
             - username: '${as_username}'
             - password: '${as_password}'
@@ -72,10 +74,10 @@ flow:
             - bool_value: '${local_db}'
         navigate:
           - 'TRUE': install_postgres
-          - 'FALSE': install_aos_application
+          - 'FALSE': install_aos_app
     - install_postgres:
         do:
-          Integrations.demo.aos.sub_flows.initialize_artifact:
+          io.cloudslang.microfocus.aos.sub_flows.initialize_artifact:
             - host: '${as_ip}'
             - username: '${as_username}'
             - password: '${as_password}'
@@ -85,11 +87,11 @@ flow:
           - db_host: localhost
           - db_port: '5432'
         navigate:
-          - SUCCESS: install_aos_application
+          - SUCCESS: install_aos_app
           - FAILURE: on_failure
-    - install_aos_application:
+    - install_aos_app:
         do:
-          Integrations.demo.aos.application.install_aos_application:
+          io.cloudslang.microfocus.aos.app.install_aos_app:
             - username: '${as_username}'
             - password:
                 value: '${as_password}'
@@ -116,7 +118,7 @@ flow:
           - 'FALSE': is_local_db
     - configure_azure_db:
         do:
-          Integrations.demo.aos.sub_flows.initialize_artifact:
+          io.cloudslang.microfocus.aos.sub_flows.initialize_artifact:
             - host: '${db_ip}'
             - username: '${db_username}'
             - password: '${db_password}'
@@ -163,6 +165,13 @@ flow:
 extensions:
   graph:
     steps:
+      install_aos_app:
+        x: 780
+        'y': 281
+        navigate:
+          25811a24-f53e-66ce-d2a0-b74349bc4dae:
+            targetId: 469c3346-67f8-8140-306a-4a2881899277
+            port: SUCCESS
       is_local_db:
         x: 588
         'y': 284
@@ -187,13 +196,6 @@ extensions:
       get_component_property_value:
         x: 42
         'y': 77
-      install_aos_application:
-        x: 780
-        'y': 281
-        navigate:
-          25811a24-f53e-66ce-d2a0-b74349bc4dae:
-            targetId: 469c3346-67f8-8140-306a-4a2881899277
-            port: SUCCESS
       is_aws_db_provider:
         x: 37
         'y': 285

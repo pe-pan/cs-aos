@@ -1,4 +1,4 @@
-namespace: Integrations.demo.aos.software
+namespace: io.cloudslang.microfocus.aos.sub_flows
 flow:
   name: create_aos_schema
   inputs:

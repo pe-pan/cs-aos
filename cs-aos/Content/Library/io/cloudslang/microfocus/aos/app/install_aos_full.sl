@@ -1,6 +1,11 @@
-namespace: Integrations.demo.aos
+########################################################################################################################
+#!!
+#! @description: Installs Java, Tomcat, Postgres SQL DB, creates AOS schema and deploys AOS war files.
+#!!#
+########################################################################################################################
+namespace: io.cloudslang.microfocus.aos.app
 flow:
-  name: install_aos
+  name: install_aos_full
   inputs:
     - username
     - password:
@@ -13,7 +18,7 @@ flow:
   workflow:
     - install_postgres:
         do:
-          Integrations.demo.aos.sub_flows.initialize_artifact:
+          io.cloudslang.microfocus.aos.sub_flows.initialize_artifact:
             - host: "${get('db_host', tomcat_host)}"
             - username: '${username}'
             - password: '${password}'
@@ -23,7 +28,7 @@ flow:
           - SUCCESS: install_java
     - install_java:
         do:
-          Integrations.demo.aos.sub_flows.initialize_artifact:
+          io.cloudslang.microfocus.aos.sub_flows.initialize_artifact:
             - host: '${tomcat_host}'
             - username: '${username}'
             - password: '${password}'
@@ -33,7 +38,7 @@ flow:
           - SUCCESS: install_tomcat
     - install_tomcat:
         do:
-          Integrations.demo.aos.sub_flows.initialize_artifact:
+          io.cloudslang.microfocus.aos.sub_flows.initialize_artifact:
             - host: '${tomcat_host}'
             - username: '${username}'
             - password: '${password}'
@@ -50,7 +55,7 @@ flow:
           - 'FALSE': deploy_wars
     - install_java_as:
         do:
-          Integrations.demo.aos.sub_flows.initialize_artifact:
+          io.cloudslang.microfocus.aos.sub_flows.initialize_artifact:
             - host: '${account_service_host}'
             - username: '${username}'
             - password: '${password}'
@@ -60,7 +65,7 @@ flow:
           - SUCCESS: install_tomcat_as
     - install_tomcat_as:
         do:
-          Integrations.demo.aos.sub_flows.initialize_artifact:
+          io.cloudslang.microfocus.aos.sub_flows.initialize_artifact:
             - host: '${account_service_host}'
             - username: '${username}'
             - password: '${password}'
@@ -70,7 +75,7 @@ flow:
           - SUCCESS: deploy_wars
     - deploy_wars:
         do:
-          Integrations.demo.aos.sub_flows.deploy_wars:
+          io.cloudslang.microfocus.aos.sub_flows.deploy_wars:
             - tomcat_host: '${tomcat_host}'
             - account_service_host: "${get('acccount_service_host',tomcat_host)}"
             - db_host: "${get('db_host', tomcat_host)}"
