@@ -12,12 +12,12 @@ flow:
         do:
           io.cloudslang.base.ssh.ssh_command:
             - host: '${host}'
-            - command: "${'cd '+get_sp('script_location')+' && rm -f '+filename}"
+            - command: "${'cd '+get_sp('io.cloudslang.microfocus.aos.script_location')+' && rm -f '+filename}"
             - username: '${username}'
             - password:
                 value: '${password}'
                 sensitive: true
-            - private_key_file: "${get_sp('aws_cert_file_path') if password is None else None}"
+            - private_key_file: "${get_sp('io.cloudslang.microfocus.aos.aws_cert_file_path') if password is None else None}"
         navigate:
           - SUCCESS: SUCCESS
           - FAILURE: on_failure

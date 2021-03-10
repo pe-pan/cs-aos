@@ -49,12 +49,12 @@ flow:
         do:
           io.cloudslang.base.ssh.ssh_command:
             - host: '${host}'
-            - command: "${'cd '+get_sp('script_location')+' && sh '+script_name+' '+get('artifact_name', '')+' '+get('parameters', '')+' > '+script_name+'.log'}"
+            - command: "${'cd '+get_sp('io.cloudslang.microfocus.aos.script_location')+' && sh '+script_name+' '+get('artifact_name', '')+' '+get('parameters', '')+' > '+script_name+'.log'}"
             - username: '${username}'
             - password:
                 value: '${password}'
                 sensitive: true
-            - private_key_file: "${get_sp('aws_cert_file_path') if password is None else None}"
+            - private_key_file: "${get_sp('io.cloudslang.microfocus.aos.aws_cert_file_path') if password is None else None}"
             - timeout: '300000'
         publish:
           - command_return_code

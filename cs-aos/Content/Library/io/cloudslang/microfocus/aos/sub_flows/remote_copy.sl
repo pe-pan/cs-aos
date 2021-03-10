@@ -36,12 +36,12 @@ flow:
           io.cloudslang.base.remote_file_transfer.remote_secure_copy:
             - source_path: '${filename}'
             - destination_host: '${host}'
-            - destination_path: "${get_sp('script_location')}"
+            - destination_path: "${get_sp('io.cloudslang.microfocus.aos.script_location')}"
             - destination_username: '${username}'
             - destination_password:
                 value: '${password}'
                 sensitive: true
-            - destination_private_key_file: "${get_sp('aws_cert_file_path') if password is None else None}"
+            - destination_private_key_file: "${get_sp('io.cloudslang.microfocus.aos.aws_cert_file_path') if password is None else None}"
             - known_hosts_policy: null
         navigate:
           - SUCCESS: SUCCESS

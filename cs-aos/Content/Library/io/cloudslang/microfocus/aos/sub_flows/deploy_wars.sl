@@ -12,7 +12,7 @@ flow:
         required: false
     - db_username
     - db_password
-    - url: "${get_sp('war_repo_root_url')}"
+    - url: "${get_sp('io.cloudslang.microfocus.aos.war_repo_root_url')}"
     - deploy_admin
   workflow:
     - deploy_account_service:
@@ -22,7 +22,7 @@ flow:
             - username: '${username}'
             - password: '${password}'
             - artifact_url: "${url+'accountservice/target/accountservice.war'}"
-            - script_url: "${get_sp('script_deploy_war')}"
+            - script_url: "${get_sp('io.cloudslang.microfocus.aos.script_deploy_war')}"
             - parameters: "${'%s %s %s %s %s' % (db_host, db_username, db_password, tomcat_host, account_service_host)}"
         navigate:
           - FAILURE: on_failure
@@ -36,7 +36,7 @@ flow:
               - username: '${username}'
               - password: '${password}'
               - artifact_url: "${url+war.lower()+'/target/'+war+'.war'}"
-              - script_url: "${get_sp('script_deploy_war')}"
+              - script_url: "${get_sp('io.cloudslang.microfocus.aos.script_deploy_war')}"
               - parameters: "${'%s %s %s %s %s' % (db_host, db_username, db_password, tomcat_host, account_service_host)}"
         navigate:
           - SUCCESS: is_true
@@ -48,7 +48,7 @@ flow:
             - username: '${username}'
             - password: '${password}'
             - artifact_url: "${url+'admin/target/admin.war'}"
-            - script_url: "${get_sp('script_deploy_war')}"
+            - script_url: "${get_sp('io.cloudslang.microfocus.aos.script_deploy_war')}"
             - parameters: "${'%s %s %s %s %s' % (db_host, db_username, db_password, tomcat_host, account_service_host)}"
         navigate:
           - SUCCESS: SUCCESS

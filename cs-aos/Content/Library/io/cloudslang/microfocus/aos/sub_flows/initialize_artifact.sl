@@ -14,7 +14,7 @@ flow:
   workflow:
     - retry_initialize_artifact:
         loop:
-          for: "retries in range(0,int(get_sp('script_retries')))"
+          for: "retries in range(0,int(get_sp('io.cloudslang.microfocus.aos.script_retries')))"
           do:
             io.cloudslang.microfocus.aos.sub_flows.retry_initialize_artifact:
               - host: '${host}'

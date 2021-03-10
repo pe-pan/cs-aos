@@ -22,7 +22,7 @@ flow:
             - host: "${get('db_host', tomcat_host)}"
             - username: '${username}'
             - password: '${password}'
-            - script_url: "${get_sp('script_install_postgres')}"
+            - script_url: "${get_sp('io.cloudslang.microfocus.aos.script_install_postgres')}"
         navigate:
           - FAILURE: on_failure
           - SUCCESS: install_java
@@ -32,7 +32,7 @@ flow:
             - host: '${tomcat_host}'
             - username: '${username}'
             - password: '${password}'
-            - script_url: "${get_sp('script_install_java')}"
+            - script_url: "${get_sp('io.cloudslang.microfocus.aos.script_install_java')}"
         navigate:
           - FAILURE: on_failure
           - SUCCESS: install_tomcat
@@ -42,7 +42,7 @@ flow:
             - host: '${tomcat_host}'
             - username: '${username}'
             - password: '${password}'
-            - script_url: "${get_sp('script_install_tomcat')}"
+            - script_url: "${get_sp('io.cloudslang.microfocus.aos.script_install_tomcat')}"
         navigate:
           - FAILURE: on_failure
           - SUCCESS: as_host_given
@@ -59,7 +59,7 @@ flow:
             - host: '${account_service_host}'
             - username: '${username}'
             - password: '${password}'
-            - script_url: "${get_sp('script_install_java')}"
+            - script_url: "${get_sp('io.cloudslang.microfocus.aos.script_install_java')}"
         navigate:
           - FAILURE: on_failure
           - SUCCESS: install_tomcat_as
@@ -69,7 +69,7 @@ flow:
             - host: '${account_service_host}'
             - username: '${username}'
             - password: '${password}'
-            - script_url: "${get_sp('script_install_tomcat')}"
+            - script_url: "${get_sp('io.cloudslang.microfocus.aos.script_install_tomcat')}"
         navigate:
           - FAILURE: on_failure
           - SUCCESS: deploy_wars

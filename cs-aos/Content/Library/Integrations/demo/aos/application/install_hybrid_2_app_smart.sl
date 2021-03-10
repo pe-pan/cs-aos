@@ -64,7 +64,7 @@ flow:
             - host: '${as_ip}'
             - username: '${as_username}'
             - password: '${as_password}'
-            - script_url: "${get_sp('script_downgrade_java')}"
+            - script_url: "${get_sp('io.cloudslang.microfocus.aos.script_downgrade_java')}"
         navigate:
           - SUCCESS: is_azure_db_provider
           - FAILURE: on_failure
@@ -81,7 +81,7 @@ flow:
             - host: '${as_ip}'
             - username: '${as_username}'
             - password: '${as_password}'
-            - script_url: "${get_sp('script_install_postgres')}"
+            - script_url: "${get_sp('io.cloudslang.microfocus.aos.script_install_postgres')}"
             - parameters: "${'%s %s' % (db_username, db_password)}"
         publish:
           - db_host: localhost
@@ -122,7 +122,7 @@ flow:
             - host: '${db_ip}'
             - username: '${db_username}'
             - password: '${db_password}'
-            - script_url: "${get_sp('script_configure_azure_postgres')}"
+            - script_url: "${get_sp('io.cloudslang.microfocus.aos.script_configure_azure_postgres')}"
             - parameters: "${'%s %s' % (db_username, db_password)}"
         publish:
           - db_host: '${host}'
